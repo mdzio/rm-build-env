@@ -1,0 +1,17 @@
+git
+make
+wget
+perl-Digest-SHA
+bzip2
+patch
+which
+gcc
+gcc-c++
+flex
+bison
+unzip
+file
+bc
+perl-Data-Dumper
+perl-ExtUtils-MakeMaker
+perl-Thread-Queue
