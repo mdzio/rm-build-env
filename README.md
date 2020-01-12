@@ -18,7 +18,7 @@ Es muss ein Volume erstellt und eingehängt werden (s.a. Option `-v`). Mindesten
 
 Der Container kann dann wie folgt gestartet werden:
 
-    docker run -it --rm -v rmbuild:/rmbuild rm-build-env
+    docker run -it --rm -v rmbuild:/rmbuild mdzio/rm-build-env
 
 Bedeutung der Optionen:
 
@@ -31,17 +31,19 @@ Bedeutung der Optionen:
 ---
 ### RaspberryMatic bauen
 
-Das Image für die SD-Karte wird dann innerhalb des Containers mit folgenden Kommandos gebaut:
+Folgende Zielplattformen können gebaut werden: `raspmatic_intelnuc`, `raspmatic_ova`, `raspmatic_rpi0`, `raspmatic_rpi3`, `raspmatic_rpi4` und `raspmatic_tinkerboard`. Mit `build-all` werden alle Zielplattformen gebaut.
+
+Das Image für Raspberry Pi 2 und 3 wird beispielsweise innerhalb des Containers mit folgenden Kommandos gebaut:
 
     git clone https://github.com/jens-maus/RaspberryMatic
     cd RaspberryMatic
-    make dist
+    make raspmatic_rpi3
 
 Je nach Rechnerleistung bewegt sich die Build-Dauer zwischen einer und mehreren Stunden. Eine SSD hilft viel. Das fertige Image ist dann im Container unter `/rmbuild/RaspberryMatic/build-raspmatic_rpi3/images/sdcard.img` zu finden.
 
 Das SD-Karten-Image kann auf den lokalen Rechner kopiert werden, wenn zusätzlich ein lokales Verzeichnis eingehängt wird. Im folgenden Beispiel wird der Container kurz gestartet um `cp` auszuführen, das die Datei nach `/home/Mathias` (im Container) bzw. `/c/Users/Mathias` (auf dem lokalen Rechner) kopiert:
 
-    docker run -it --rm -v rmbuild:/rmbuild -v /c/Users/Mathias:/home/Mathias rm-build-env cp /rmbuild/RaspberryMatic/build-raspmatic_rpi3/images/sdcard.img /home/Mathias
+    docker run -it --rm -v rmbuild:/rmbuild -v /c/Users/Mathias:/home/Mathias mdzio/rm-build-env cp /rmbuild/RaspberryMatic/build-raspmatic_rpi3/images/sdcard.img /home/Mathias
 
 ---
 ### Erstellen des Docker-Images
@@ -55,4 +57,4 @@ Die Quellen zum Erstellen des Docker-Images sind auf [GitHub](https://github.com
 
 * *Docker Community Edition for Windows* setzt Windows 10 Professional voraus. Ansonsten muss die [Docker Toolbox for Windows](https://docs.docker.com/toolbox/toolbox_install_windows/) installiert werden.
 * Unter Windows kann durch Setzen der Umgebungsvariable MACHINE_STORAGE_PATH **vor** Installation der *Docker Toolbox* ein anderes Laufwerk für die virtuelle Maschine gewählt werden.
-* Das Verzeichnis `/c/Users` bzw. `c:\Users` wird automatisch in die Docker-VM eingehängt und kann zum Dateitransfer verwendet werden. 
+* Lokale Laufwerke können über _Docker Desktop → Settings → Shared Drives_ eingebunden werden.
