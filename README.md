@@ -14,7 +14,7 @@ Das Docker-Image kann mit folgendem Befehl aus dem öffentlichen Docker-Reposito
 ---
 ### Starten des Containers
 
-Es muss ein Volume erstellt und eingehängt werden (s.a. Option `-v`). Auf dem Volume wird später RaspberryMatic mit allen Zwischendateien gebaut. Mindestens 25 GByte freier Festplattenplatz und 4 GB Arbeitsspeicher sollten für das Bauen eines einzigen Build-Zieles (z.B. raspmatic_rpi2) zur Verfügung stehen. 
+Es muss ein Volume erstellt und eingehängt werden (s.a. Option `-v`). Auf dem Volume wird später RaspberryMatic mit allen Zwischendateien gebaut. Mindestens 35 GByte freier Festplattenplatz und 4 GB Arbeitsspeicher sollten für das Bauen eines einzigen Build-Zieles (z.B. raspmatic_rpi2) zur Verfügung stehen. 
 
 Eine Konsole innerhalb des Containers kann dann wie folgt geöffnet werden:
 
@@ -44,15 +44,15 @@ Eine Liste der unterstützten Build-Ziele wird mit folgendem Befehl ausgegeben:
 
 Das Image für ein Raspberry Pi 2 wird beispielsweise mit folgendem Befehlen gebaut:
 
-    make raspmatic_rpi2
+    make raspmatic_rpi2-release
 
-**TODO**
+Je nach Rechnerleistung bewegt sich die Build-Dauer zwischen einer und mehreren Stunden. Eine SSD hilft viel. Das fertige Image ist dann im Container unter `/rmbuild/RaspberryMatic/release/RaspberryMatic-...-rpi2.zip` zu finden (... ist ein Platzhalter für die Versionsnr. und das Datum).
 
-Je nach Rechnerleistung bewegt sich die Build-Dauer zwischen einer und mehreren Stunden. Eine SSD hilft viel. Das fertige Image ist dann im Container unter `/rmbuild/RaspberryMatic/build-raspmatic_rpi3/images/sdcard.img` zu finden.
+Das SD-Karten-Image kann mit _Docker Desktop_ vom Volume _rmbuild_ auf den lokalen Rechner kopiert werden (_Volumes_ → _rmbuild_ → Zum Image durchklicken → Rechte Maustaste → _Save As..._ auswählen).
 
-Das SD-Karten-Image kann auf den lokalen Rechner kopiert werden, wenn zusätzlich ein lokales Verzeichnis eingehängt wird. Im folgenden Beispiel wird der Container kurz gestartet um `cp` auszuführen, das die Datei nach `/home/Mathias` (im Container) bzw. `/c/Users/Mathias` (auf dem lokalen Rechner) kopiert:
+Alternativ kann ein lokales Verzeichnis eingehängt werden. Im folgenden Beispiel wird der Container kurz gestartet um `cp` auszuführen, das die Datei nach `/home/Mathias` (im Container) bzw. `/c/Users/Mathias` (auf dem lokalen Rechner) kopiert:
 
-    docker run -it --rm -v rmbuild:/rmbuild -v /c/Users/Mathias:/home/Mathias mdzio/rm-build-env cp /rmbuild/RaspberryMatic/build-raspmatic_rpi3/images/sdcard.img /home/Mathias
+    docker run -it --rm -v rmbuild:/rmbuild -v /c/Users/Mathias:/home/Mathias mdzio/rm-build-env cp /rmbuild/RaspberryMatic/release/RaspberryMatic-...-rpi2.zip /home/Mathias
 
 ---
 ### Erstellen des Docker-Images
