@@ -1,6 +1,6 @@
 ## Build-Umgebung für RaspberryMatic
 
-Mit [RaspberryMatic](https://github.com/jens-maus/RaspberryMatic) ist es möglich eine HomeMatic CCU auf einem RaspberryPi zu betreiben. Für das Bauen von RaspberryMatic werden etliche Werkzeuge auf dem Entwicklungsrechner vorausgesetzt. Hier wird nun ein fertiges Docker-Image zur Verfügung gestellt, das alle nötigen Werkzeuge enthält und direkt die RaspberryMatic-Quellen übersetzen und ein fertiges SD-Karten-Image bauen kann. Es wird natürlich eine lauffähige [Docker Umgebung](https://www.docker.com/community-edition) benötigt.
+Mit [RaspberryMatic](https://raspberrymatic.de/de/start/) ist es möglich eine HomeMatic CCU auf einem RaspberryPi oder anderen Kleinstrechnern zu betreiben. Für das Bauen von RaspberryMatic werden etliche Werkzeuge auf dem Entwicklungsrechner vorausgesetzt. Hier wird nun ein fertiges Docker-Image zur Verfügung gestellt, das alle nötigen Werkzeuge enthält und direkt die RaspberryMatic-Quellen übersetzen und ein fertiges SD-Karten-Image bauen kann. Es wird natürlich eine lauffähige [Docker Umgebung](https://www.docker.com/community/) benötigt.
 
 Erfahrungen mit Docker und der Linux-Konsole sollten vorhanden sein.
 
@@ -14,9 +14,9 @@ Das Docker-Image kann mit folgendem Befehl aus dem öffentlichen Docker-Reposito
 ---
 ### Starten des Containers
 
-Es muss ein Volume erstellt und eingehängt werden (s.a. Option `-v`). Mindestens 25 GByte freier Platz sollten zur Verfügung stehen. Auf dem Volume wird später RaspberryMatic mit allen Zwischendateien gebaut.
+Es muss ein Volume erstellt und eingehängt werden (s.a. Option `-v`). Auf dem Volume wird später RaspberryMatic mit allen Zwischendateien gebaut. Mindestens 25 GByte freier Festplattenplatz und 4 GB Arbeitsspeicher sollten für das Bauen eines einzigen Build-Zieles (z.B. raspmatic_rpi2) zur Verfügung stehen. 
 
-Der Container kann dann wie folgt gestartet werden:
+Eine Konsole innerhalb des Containers kann dann wie folgt geöffnet werden:
 
     docker run -it --rm -v rmbuild:/rmbuild mdzio/rm-build-env
 
@@ -24,20 +24,29 @@ Bedeutung der Optionen:
 
 |Option|Bedeutung|
 |---|---|
-|-it|Interaktiv und mit Konsole|
-|--rm|Änderungen am Container verwerfen (Im Volume bleiben sie erhalten!)|
-|-v|Volume erstellen und einhängen|
+|-it|Container interaktiv und mit Konsole starten.|
+|--rm|Beim Beenden wird der Container verworfen. (Die Dateien im Volume bleiben erhalten!)|
+|-v|Volume einhängen.|
 
 ---
 ### RaspberryMatic bauen
 
-Folgende Zielplattformen können gebaut werden: `raspmatic_intelnuc`, `raspmatic_ova`, `raspmatic_rpi0`, `raspmatic_rpi3`, `raspmatic_rpi4` und `raspmatic_tinkerboard`. Mit `build-all` werden alle Zielplattformen gebaut.
+Hinweis: Die folgenden Befehle müssen auf einer Konsole innerhalb des Docker-Containers ausgeführt werden.
 
-Das Image für Raspberry Pi 2 und 3 wird beispielsweise innerhalb des Containers mit folgenden Kommandos gebaut:
+Die aktuellen Quellen vom RaspberryMatic GitHub-Repository herunterladen:
 
     git clone https://github.com/jens-maus/RaspberryMatic
     cd RaspberryMatic
-    make raspmatic_rpi3
+
+Eine Liste der unterstützten Build-Ziele wird mit folgendem Befehl ausgegeben:
+
+    make help
+
+Das Image für ein Raspberry Pi 2 wird beispielsweise mit folgendem Befehlen gebaut:
+
+    make raspmatic_rpi2
+
+**TODO**
 
 Je nach Rechnerleistung bewegt sich die Build-Dauer zwischen einer und mehreren Stunden. Eine SSD hilft viel. Das fertige Image ist dann im Container unter `/rmbuild/RaspberryMatic/build-raspmatic_rpi3/images/sdcard.img` zu finden.
 
@@ -48,13 +57,7 @@ Das SD-Karten-Image kann auf den lokalen Rechner kopiert werden, wenn zusätzlic
 ---
 ### Erstellen des Docker-Images
 
-Die Quellen zum Erstellen des Docker-Images sind auf [GitHub](https://github.com/mdzio/rm-build-env) zu finden. In das Verzeichnisses der Datei `Dockerfile` wechseln und dann folgenden Befehl ausführen: 
+Die Quellen zum Erstellen des Docker-Images sind auf [GitHub](https://github.com/mdzio/rm-build-env) zu finden. In das Verzeichnis der Datei `Dockerfile` wechseln und dann folgenden Befehl ausführen: 
 
     docker build -t rm-build-env .
 
----
-### Tipps für Docker unter Windows
-
-* *Docker Community Edition for Windows* setzt Windows 10 Professional voraus. Ansonsten muss die [Docker Toolbox for Windows](https://docs.docker.com/toolbox/toolbox_install_windows/) installiert werden.
-* Unter Windows kann durch Setzen der Umgebungsvariable MACHINE_STORAGE_PATH **vor** Installation der *Docker Toolbox* ein anderes Laufwerk für die virtuelle Maschine gewählt werden.
-* Lokale Laufwerke können über _Docker Desktop → Settings → Shared Drives_ eingebunden werden.

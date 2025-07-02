@@ -15,3 +15,10 @@ bc
 perl-Data-Dumper
 perl-ExtUtils-MakeMaker
 perl-Thread-Queue
+perl-open
+perl-English
+perl-FindBin
+perl-IPC-Cmd
+diffutils
+cpio
+rsync
